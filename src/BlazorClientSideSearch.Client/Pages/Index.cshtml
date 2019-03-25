@@ -1,2 +1,31 @@
 ﻿@page "/"
 
+<input bind="@SearchTerm" autofocus />
+
+<span class="text-muted ml-5">
+    Showing @FilteredToDos.Count out of @ToDoItems.Count
+</span>
+
+<h4 class="mt-4">To Do's</h4>
+<ul>
+    @foreach (var toDo in FilteredToDos)
+    {
+        <li>@toDo.Name</li>
+    }
+</ul>
+
+@functions {
+    // Initialize SearchTerm to "" to prevent null's
+    string SearchTerm { get; set; } = "";
+
+    // Imagine this was retrieved from an API
+    List<ToDoItem> ToDoItems => new List<ToDoItem>
+    {
+        new ToDoItem { Name = "Garbage" },
+        new ToDoItem { Name = "Dishes" },
+        new ToDoItem { Name = "Wash clothes" },
+        new ToDoItem { Name = "Water flowers" }
+    };
+
+    List<ToDoItem> FilteredToDos => ToDoItems.Where(i => i.Name.ToLower().Contains(SearchTerm.ToLower())).ToList();
+}
